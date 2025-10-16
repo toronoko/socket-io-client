@@ -3,7 +3,9 @@ import "./App.css";
 import { io, Socket } from "socket.io-client";
 
 function App() {
-  const [socket] = useState<Socket>(() => io("http://localhost:8080"));
+  const [socket] = useState<Socket>(() =>
+    io("https://socket-io-server-clh8.onrender.com/")
+  );
   const [join, setJoin] = useState("");
   const [input, setInput] = useState("");
   const [pTags, setPTags] = useState<{ id: number; text: string }[]>([]);
