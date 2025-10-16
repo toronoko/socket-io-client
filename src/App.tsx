@@ -56,7 +56,6 @@ function App() {
     if (input.trim().length > 0) {
       const newMessage = { id: Date.now(), text: input };
       setPTags([...pTags, newMessage]);
-      setInput("");
 
       socket.emit("message", {
         room: "general",
