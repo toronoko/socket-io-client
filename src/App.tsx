@@ -46,7 +46,7 @@ function App() {
         block: "end",
       });
     }
-  }, [pTags]);
+  }, []);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
