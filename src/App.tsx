@@ -13,7 +13,6 @@ function App() {
   const lastMessageRef = useRef<HTMLParagraphElement>(null);
   const handleNewMessage = (um: string) => {
     setPTags((prev) => [...prev, { id: Date.now(), text: `${um}` }]);
-    setInput("");
   };
 
   useEffect(() => {
