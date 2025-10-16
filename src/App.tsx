@@ -11,9 +11,6 @@ function App() {
   const [pTags, setPTags] = useState<{ id: number; text: string }[]>([]);
 
   const lastMessageRef = useRef<HTMLParagraphElement>(null);
-  const handleNewMessage = (um: string) => {
-    setPTags((prev) => [...prev, { id: Date.now(), text: `${um}` }]);
-  };
 
   useEffect(() => {
     const handleConnect = () => {
@@ -26,16 +23,18 @@ function App() {
       console.log("Server says:", message);
     };
 
+    const handleNewMessage = (um: string) => {
+      setPTags((prev) => [...prev, { id: Date.now(), text: um }]);
+    };
+
     socket.on("connect", handleConnect);
     socket.on("welcome", handleWelcome);
-
     socket.on("newMessage", handleNewMessage);
 
     return () => {
       socket.off("connect", handleConnect);
       socket.off("welcome", handleWelcome);
       socket.off("newMessage", handleNewMessage);
-      socket.off("message");
     };
   }, [socket]);
 
@@ -46,22 +45,24 @@ function App() {
         block: "end",
       });
     }
-  }, []);
+  }, [pTags]);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
   const handleSubmit = () => {
-    if (input.trim().length > 0) {
-      const newMessage = { id: Date.now(), text: input };
-      setPTags([...pTags, newMessage]);
+    const trimmed = input.trim();
+    if (!trimmed) return;
 
-      socket.emit("message", {
-        room: "general",
-        msg: `${socket.id} => ${input}`,
-      });
-    }
+    setPTags((prev) => [...prev, { id: Date.now(), text: trimmed }]);
+
+    socket.emit("message", {
+      room: "general",
+      msg: `${socket.id} => ${trimmed}`,
+    });
+
+    setInput("");
   };
 
   return (
@@ -72,6 +73,7 @@ function App() {
           <p
             key={paragraph.id}
             ref={index === pTags.length - 1 ? lastMessageRef : null}
+            style={{ wordBreak: "break-word", whiteSpace: "pre-wrap" }}
           >
             {paragraph.text}
           </p>
