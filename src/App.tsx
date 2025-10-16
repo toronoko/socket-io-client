@@ -4,7 +4,7 @@ import { io, Socket } from "socket.io-client";
 
 function App() {
   const [socket] = useState<Socket>(() =>
-    io("https://socket-io-server-clh8.onrender.com/")
+    io("https://socket-io-server-1-kkw2.onrender.com")
   );
   const [join, setJoin] = useState("");
   const [input, setInput] = useState("");
